@@ -12,15 +12,14 @@ const literacyRates = [
 ];
 
 const yearColors = {
-  2010: "bg-blue-500",   // Color for 2010
-  2018: "bg-green-500",  // Color for 2018
-  2023: "bg-yellow-500",  // Color for 2023
+  2010: "bg-blue-500",   
+  2018: "bg-green-500",  
+  2023: "bg-yellow-500",  
 };
 
 const BarChart = () => {
   const barHeightMultiplier = 3; // Multiplier to control bar height
 
-  // Updated formatNumber function to round to whole numbers
   const formatNumber = (num) => Math.round(num); // Rounding to whole numbers
 
   return (
