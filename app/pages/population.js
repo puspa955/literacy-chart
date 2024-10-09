@@ -12,11 +12,15 @@ const populations = [
 ];
 
 const PopulationPage = () => {
+  const maxPopulation = Math.max(...populations.map(p => p.population));
+  
+  const maxScale = maxPopulation > 1400000000 ? 1500000000 : maxPopulation;
+
   return (
     <BarChart 
       data={populations} 
       title="South Asian Countries Population" 
-      maxScale={1500000000} 
+      maxScale={maxScale} // Use the dynamic max value
       dataKey="population" 
       unit=""
     />
