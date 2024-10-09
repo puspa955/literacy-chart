@@ -1,18 +1,19 @@
-const BarChart = ({ data, title, maxScale = 100, barColor = "bg-blue-500", dataKey = 'value', unit = "%" }) => {
+const BarChart = ({ data, title, barColor = "bg-blue-500", dataKey = 'value', unit = "%" }) => {
     const chartHeight = 300; // Consistent chart height
+  
+    const maxValue = Math.max(...data.map(item => item[dataKey]));
+    const maxScale = dataKey === 'rate' ? 100 : (maxValue > 1400000000 ? 1500000000 : maxValue); 
     const barHeightMultiplier = chartHeight / maxScale;
-    const minBarHeight = 2;  // Minimum bar height to avoid disappearing bars
+    const minBarHeight = 2; 
   
-    // For population, round to the nearest hundred
-    const formatPopulation = (num) => Math.round(num / 100) * 100;
+     const formatPopulation = (num) => Math.round(num / 100) * 100;
   
-    // For literacy, keep the number as is
-    const formatLiteracy = (num) => num.toFixed(0); // Format to one decimal place
-  
-    // Choose the appropriate format function based on dataKey
-    const formatNumber = (num, isLiteracy) => {
-      return isLiteracy ? formatLiteracy(num) : formatPopulation(num);
-    };
+     const formatLiteracy = (num) => num.toFixed(0); // Format to one decimal place
+   
+     // Choose the appropriate format function based on dataKey
+     const formatNumber = (num, isLiteracy) => {
+       return isLiteracy ? formatLiteracy(num) : formatPopulation(num);
+     };
   
     return (
       <div className="w-full p-4 flex flex-col items-center justify-center">
@@ -21,7 +22,7 @@ const BarChart = ({ data, title, maxScale = 100, barColor = "bg-blue-500", dataK
           {/* Y-Axis */}
           <div className="flex flex-col justify-between h-[320px] pr-4 relative mt-1">
             {[...Array(11)].map((_, index) => {
-              const labelValue = Math.round(maxScale / 10 * (10 - index)); // No rounding for literacy
+              const labelValue = Math.round(maxScale / 10 * (10 - index)); // Y-axis labels
               return (
                 <div key={index} className="flex items-center justify-end w-full">
                   <p className="text-sm text-gray-700 text-right w-20">
@@ -41,9 +42,7 @@ const BarChart = ({ data, title, maxScale = 100, barColor = "bg-blue-500", dataK
                 const barHeight = Math.max(item[dataKey] * barHeightMultiplier, minBarHeight); 
                 return (
                   <div key={index} className="flex flex-col items-center w-[60px] mx-2">
-                    <p className="text-xs text-gray-500 mb-1">
-                      {formatNumber(item[dataKey], unit === "%")}{unit} {/* Use appropriate format */}
-                    </p>
+                    <p className="text-xs text-gray-500 mb-1">{formatNumber(item[dataKey], unit === "%")}{unit}</p>
                     <div className={`${barColor} w-10`} style={{ height: `${barHeight}px` }}></div>
                     <p className="text-xs text-gray-500">{item.country}</p>
                   </div>

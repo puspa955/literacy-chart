@@ -1,4 +1,5 @@
 import BarChart from '../components/BarChart'; 
+
 const literacyRates2023 = [
   { country: "India", rate: 73.3 },
   { country: "Pakistan", rate: 60.0 },
@@ -15,10 +16,9 @@ const LiteracyRatePage = () => {
     <BarChart 
       data={literacyRates2023} 
       title="South Asian Countries Literacy Rate (2023)" 
-      maxScale={100} 
-      barColor="bg-yellow-500"
       dataKey="rate" 
       unit="%"
+      barColor='bg-green-500'
     />
   );
 };
