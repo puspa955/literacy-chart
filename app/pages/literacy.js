@@ -18,7 +18,6 @@ const LiteracyRatePage = () => {
       title="South Asian Countries Literacy Rate (2023)" 
       dataKey="rate" 
       unit="%"
-      barColor='bg-green-500'
     />
   );
 };
