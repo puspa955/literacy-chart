@@ -38,10 +38,10 @@ const BarChart = ({ data, title, yLabel }) => {
             .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
 
-        // Append Y-axis without rounding the tick values
+        // Append Y-axis with rounded tick values
         svg.append("g")
             .attr("transform", `translate(${margin.left}, 0)`)
-            .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format("d"))); // Use "d" for exact numbers without rounding
+            .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".2s"))); // Rounded tick values
 
         // Draw gridlines
         svg.append("g")
@@ -83,7 +83,7 @@ const BarChart = ({ data, title, yLabel }) => {
             .attr("text-anchor", "middle")
             .style("font-size", "10px")
             .style("fill", "#333")
-            .text(d => d.value); // Display the exact value
+            .text(d => d.value); // Display exact values
 
         // Add chart title
         svg.append("text")
