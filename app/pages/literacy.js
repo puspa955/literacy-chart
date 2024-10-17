@@ -1,24 +1,20 @@
 import BarChart from '../components/BarChart'; 
 
-const literacyRates2023 = [
-  { country: "India", rate: 73.3 },
-  { country: "Pakistan", rate: 60.0 },
-  { country: "Bangladesh", rate: 75.0 },
-  { country: "Sri Lanka", rate: 92.0 },
-  { country: "Nepal", rate: 70.0 },
-  { country: "Bhutan", rate: 70.5 },
-  { country: "Maldives", rate: 97.0 },
-  { country: "Afghanistan", rate: 42.0 },
+const literacyRateData = [
+  { country: 'India', value: 77.7 }, 
+  { country: 'Pakistan', value: 59.13 },
+  { country: 'Bangladesh', value: 74.9 },
+  { country: 'Nepal', value: 97.4 },
+  { country: 'Sri Lanka', value: 92.4 },
+  { country: 'Bhutan', value: 91.6 },
+  { country: 'Maldives', value: 99.3 },
+  { country: 'Afghanistan', value: 37.2 }
 ];
 
 const LiteracyRatePage = () => {
   return (
-    <BarChart 
-      data={literacyRates2023} 
-      title="South Asian Countries Literacy Rate (2023)" 
-      dataKey="rate" 
-      unit="%"
-    />
+    <BarChart data={literacyRateData} title="Literacy Rate (%)" yLabel="Literacy Rate (%)" />
+
   );
 };
 

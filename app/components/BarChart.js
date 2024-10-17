@@ -1,46 +1,112 @@
-const BarChart = ({ data, title, dataKey = 'value', unit = '%' }) => {
-    const chartHeight = 300;
+"use client";
+import { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
 
-    
+const BarChart = ({ data, title, yLabel }) => {
+    const svgRef = useRef();
 
-    const maxValue = Math.max(...data.map(item => item[dataKey]));
-    const numberOfIntervals = 8; 
-    const interval = maxValue / numberOfIntervals; 
+    useEffect(() => {
+        if (!data || data.length === 0) return; // Early exit for empty data
+
+        // Set up SVG dimensions and margins
+        const margin = { top: 60, right: 20, bottom: 60, left: 70 };
+        const width = 600 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+
+        // Select and clear the SVG container
+        const svg = d3.select(svgRef.current)
+            .attr("viewBox", `0 0 ${600} ${400}`)
+            .style("overflow", "visible");
+
+        svg.selectAll('*').remove(); // Clear any previous chart
+
+        // Define scales
+        const x = d3.scaleBand()
+            .domain(data.map(d => d.country))
+            .range([margin.left, width - margin.right])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.value)]).nice()
+            .range([height - margin.bottom, margin.top]);
+
+        // Append X-axis
+        svg.append("g")
+            .attr("transform", `translate(0,${height - margin.bottom})`)
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
+
+        // Append Y-axis without rounding the tick values
+        svg.append("g")
+            .attr("transform", `translate(${margin.left}, 0)`)
+            .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format("d"))); // Use "d" for exact numbers without rounding
+
+        // Draw gridlines
+        svg.append("g")
+            .attr("class", "grid")
+            .selectAll("line")
+            .data(y.ticks(5))
+            .enter().append("line")
+            .attr("x1", margin.left)
+            .attr("x2", width - margin.right)
+            .attr("y1", d => y(d))
+            .attr("y2", d => y(d))
+            .attr("stroke", "#ccc")
+            .attr("stroke-dasharray", "2,2");
+
+        // Draw bars
+        svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x(d.country))
+            .attr("y", d => y(d.value))
+            .attr("height", d => y(0) - y(d.value))
+            .attr("width", x.bandwidth())
+            .attr("fill", "#4A90E2")
+            .on("mouseover", function (event, d) {
+                d3.select(this).attr("fill", "#003366"); // Hover effect
+            })
+            .on("mouseout", function (event, d) {
+                d3.select(this).attr("fill", "#4A90E2");
+            });
+
+        // Add bar labels with exact values
+        svg.selectAll(".label")
+            .data(data)
+            .enter().append("text")
+            .attr("class", "label")
+            .attr("x", d => x(d.country) + x.bandwidth() / 2)
+            .attr("y", d => y(d.value) - 5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "10px")
+            .style("fill", "#333")
+            .text(d => d.value); // Display the exact value
+
+        // Add chart title
+        svg.append("text")
+            .attr("x", width / 2 + margin.left / 2)
+            .attr("y", margin.top / 2)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .text(title);
+
+        // Add Y-axis label
+        svg.append("text")
+            .attr("x", -(height / 2))
+            .attr("y", margin.left / 4)
+            .attr("transform", "rotate(-90)")
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text(yLabel);
+
+    }, [data, title, yLabel]);
 
     return (
-      <div className="w-full p-4 flex flex-col items-center justify-center">
-        <h1 className="text-center text-2xl font-bold mb-6">{title}</h1>
-        <div className="flex">
-          {/* Y-Axis */}
-          <div className="flex flex-col justify-between h-[320px] pr-4 relative mt-1">
-            {[...Array(numberOfIntervals + 1)].map((_, index) => (
-              <div key={index} className="flex items-center justify-end w-full">
-                <p className="text-sm text-gray-700 text-right w-20">
-                {Math.round((interval * (numberOfIntervals - index)) / 10) * 10}{unit}
-                </p>
-                <div className="absolute left-[6rem] w-[600px] h-px bg-gray-300 mt-1"></div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Bar Chart */}
-          <div className="flex flex-col items-center bg-gray-200" style={{ width: '600px' }}>
-            <div className="flex items-end h-[332px] relative">
-              <div className="absolute left-0 w-full h-px bg-gray-300 bottom-0"></div>
-              {data.map((item, index) => {
-                const barHeight = Math.max(item[dataKey] * (chartHeight / maxValue), 2); // Minimum bar height
-                return (
-                  <div key={index} className="flex flex-col items-center w-[60px] mx-2">
-                    <p className="text-xs text-gray-500 mb-1">{Math.round(item[dataKey])}{unit}</p>
-                    <div className="bg-blue-500 w-10" style={{ height: `${barHeight}px` }}></div>
-                    <p className="text-xs text-gray-500">{item.country}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
+        <svg ref={svgRef} width={600} height={400}></svg>
     );
 };
 

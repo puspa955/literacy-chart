@@ -1,25 +1,20 @@
 import BarChart from '../components/BarChart'; 
 
-const populations = [
-  { country: "India", population: 1406631786 },
-  { country: "Pakistan", population: 233500636 },
-  { country: "Bangladesh", population: 172518940 },
-  { country: "Sri Lanka", population: 21877894 },
-  { country: "Nepal", population: 30496279 },
-  { country: "Bhutan", population: 787941 },
-  { country: "Maldives", population: 521021 },
-  { country: "Afghanistan", population: 42235038 },
+const populationData = [
+  { country: 'India', value: 1393409038 }, 
+  { country: 'Pakistan', value: 225199937 },
+  { country: 'Bangladesh', value: 166303498 },
+  { country: 'Nepal', value: 29136808 },
+  { country: 'Sri Lanka', value: 21919000 },
+  { country: 'Bhutan', value: 7633000 },
+  { country: 'Maldives', value: 515696 },
+  { country: 'Afghanistan', value: 40218234 }
 ];
 
 const PopulationPage = () => {
   return (
-    <BarChart 
-      data={populations} 
-      title="South Asian Countries Population" 
-      dataKey="population" 
-      unit=""
-      
-    />
+    <BarChart data={populationData} title="Population (2023)" yLabel="Population" />
+
   );
 };
 
