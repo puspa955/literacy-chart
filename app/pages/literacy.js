@@ -1,5 +1,6 @@
 import React from "react";
-import ParentChart from "../components/Parent";
+import BarChart from '../components/BarChart'; 
+import LineChart from '../components/LineChart';
 
 const literacyRateData = [
   { country: 'India', value: 77.7 }, 
@@ -14,11 +15,10 @@ const literacyRateData = [
 
 const LiteracyRatePage = () => {
   return (
-    <ParentChart 
-      data={literacyRateData} 
-      title="Literacy Rate (%) by Country" 
-      yLabel="Literacy Rate (%)" 
-    />
+    <div>
+       <BarChart data={literacyRateData} title="Literacy Rate by Country Bar Graph" yLabel="Literacy Rate (%)" />
+       <LineChart data={literacyRateData} title="Literacy Rate Trends Line Graph" yLabel="Literacy Rate (%)" />
+    </div>
   );
 };
 

@@ -1,27 +1,104 @@
+"use client";
 import React from "react";
+import * as d3 from "d3";
+import Scale from "./ChartUtils"; 
+import ChartLabels from "./Chartcomponents"; 
 
-const LineChart = ({ data, xScaleLine, yScaleLine, line }) => {
-    return (
-        <g>
-            {/* Line */}
-            <path
-                d={line(data)}
-                fill="none"
-                stroke="#FF5733"
-                strokeWidth={2}
-            />
-            {/* Dots for Line Graph */}
-            {data.map((d, i) => (
-                <circle
-                    key={i}
-                    cx={xScaleLine(d.country) + xScaleLine.bandwidth() / 2}
-                    cy={yScaleLine(d.value)}
-                    r={3}
-                    fill="#FF5733"
-                />
-            ))}
-        </g>
-    );
+const LineChart = ({ data, title, yLabel }) => {
+  const margin = { top: 60, right: 10, bottom: 60, left: 70 };
+  const width = 600 - margin.left - margin.right;
+  const height = 400 - margin.top - margin.bottom;
+
+  // Create scales using the Scale component
+  const { xScale, yScale } = Scale({ data, width, height, margin });
+
+  const formatSI = d3.format(".2s");
+
+  // Line generator
+  const line = d3.line()
+    .x(d => xScale(d.country) + xScale.bandwidth() / 2)
+    .y(d => yScale(d.value));
+
+  // Prepare data points
+  const dataPoints = data.map((d, i) => (
+    <circle
+      key={i}
+      cx={xScale(d.country) + xScale.bandwidth() / 2}
+      cy={yScale(d.value)}
+      r={3}
+      fill="#FF5733"
+    />
+  ));
+
+  // Prepare labels for the points
+  const pointLabels = data.map((d, i) => (
+    <text
+      key={`label-${i}`}
+      x={xScale(d.country) + xScale.bandwidth() / 2}
+      y={yScale(d.value) - 5}
+      textAnchor="middle"
+      style={{ fontSize: "10px" }}
+    >
+      {d.value}
+    </text>
+  ));
+
+  return (
+    <svg width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}>
+      {/* Chart Labels */}
+      <ChartLabels title={title} yLabel={yLabel} width={width} height={height} margin={margin} />
+
+      {/* X-axis */}
+      <g transform={`translate(0, ${height - margin.bottom})`}>
+        {data.map((d, i) => (
+          <g key={i} transform={`translate(${xScale(d.country) + xScale.bandwidth() / 2}, 0)`}>
+            <line y2="6" stroke="black" />
+            <text
+              transform="rotate(-45)"
+              x={0}
+              y={15}
+              dy=".71em"
+              textAnchor="end"
+              style={{ fontSize: "10px" }}
+            >
+              {d.country}
+            </text>
+          </g>
+        ))}
+      </g>
+
+      {/* Y-axis */}
+      <g transform={`translate(${margin.left}, 0)`}>
+        {yScale.ticks(5).map((tick, i) => (
+          <g key={i} transform={`translate(0, ${yScale(tick)})`}>
+            <line x2={width - margin.right} stroke="#ccc" strokeDasharray="2,2" />
+            <line x2="-6" stroke="black" />
+            <text
+              x={-10}
+              y={5}
+              textAnchor="end"
+              style={{ fontSize: "10px" }}
+            >
+              {formatSI(tick)}
+            </text>
+          </g>
+        ))}
+        <line y1={yScale(yScale.domain()[0])} y2={yScale(yScale.domain()[1])} stroke="black" />
+      </g>
+
+      {/* Line */}
+      <path
+        d={line(data)}
+        fill="none"
+        stroke="#FF5733"
+        strokeWidth={2}
+      />
+      {/* Dots for Line Graph */}
+      {dataPoints}
+      {/* Labels for Dots */}
+      {pointLabels}
+    </svg>
+  );
 };
 
 export default LineChart;
