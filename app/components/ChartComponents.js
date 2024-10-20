@@ -1,4 +1,4 @@
-"use client";
+// Chartcomponents.js
 import React from "react";
 
 const ChartLabels = ({ title, yLabel, width, height, margin }) => {
@@ -16,11 +16,11 @@ const ChartLabels = ({ title, yLabel, width, height, margin }) => {
 
       {/* Y-axis Label */}
       <text
-        transform="rotate(-90)"
-        x={-(height / 2)}
+        x={-(height / 3) - margin.top}
         y={margin.left / 3}
         textAnchor="middle"
-        style={{ fontSize: "12px" }}
+        transform="rotate(-90)"
+        style={{ fontSize: "14px" }}
       >
         {yLabel}
       </text>
