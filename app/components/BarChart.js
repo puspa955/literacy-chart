@@ -1,7 +1,7 @@
 import React from "react";
 import Scale from "./ChartUtils";
 import Axes from "./Axes";
-import ChartLabels from "./Chartcomponents"; 
+import ChartLabels from "./ChartComponents"; 
 
 const BarChart = ({ data, title, yLabel = "Population" }) => {
   const margin = { top: 60, right: 10, bottom: 60, left: 70 };
