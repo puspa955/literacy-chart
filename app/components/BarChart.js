@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import Scale from "./ChartUtils";
-import Axes from "./Axes";
+import XAxis from "./XAxis"; 
+import YAxis from "./YAxis"; 
 import ChartLabels from "./ChartComponents"; 
 import Bar from "./bar"; 
 import ChartContainer from "./ChartContainer";
@@ -14,9 +15,12 @@ const BarChart = ({ data, title, yLabel = "Population" }) => {
   const { xScale, yScale } = Scale({ data, width, height, margin });
 
   return (
-   <ChartContainer width={width} height={height} margin={margin}>      
+    <ChartContainer width={width} height={height} margin={margin}>
       <ChartLabels title={title} yLabel={yLabel} width={width} height={height} margin={margin} />
-      <Axes xScale={xScale} yScale={yScale} data={data} width={width} height={height} margin={margin} />
+      
+      <XAxis xScale={xScale} data={data} height={height} margin={margin} />
+      <YAxis yScale={yScale} width={width} margin={margin} />
+
       <Bar data={data} xScale={xScale} yScale={yScale} />
     </ChartContainer>
   );

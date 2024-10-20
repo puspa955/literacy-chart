@@ -1,6 +1,7 @@
 import React from "react";
 import Scale from "./ChartUtils"; 
-import Axes from "./Axes"; 
+import XAxis from "./XAxis"; 
+import YAxis from "./YAxis"; 
 import ChartLabels from "./ChartComponents"; 
 import LineSeries from "./LineSeries"; 
 import ChartContainer from "./ChartContainer"; 
@@ -15,7 +16,8 @@ const LineChart = ({ data, title, yLabel }) => {
   return (
     <ChartContainer width={width} height={height} margin={margin}>
       <ChartLabels title={title} yLabel={yLabel} width={width} height={height} margin={margin} />
-      <Axes xScale={xScale} yScale={yScale} data={data} width={width} height={height} margin={margin}/>
+      <XAxis xScale={xScale} data={data} height={height} margin={margin} />
+      <YAxis yScale={yScale} width={width} margin={margin} />
       <LineSeries data={data} xScale={xScale} yScale={yScale} />
     </ChartContainer>
   );
