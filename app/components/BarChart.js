@@ -2,7 +2,7 @@
 import React from "react";
 import Scale from "./ChartUtils";
 import Axes from "./Axes";
-import ChartLabels from "./Chartcomponents"; 
+import ChartLabels from "./ChartComponents"; 
 import Bar from "./bar"; 
 import ChartContainer from "./ChartContainer";
 
